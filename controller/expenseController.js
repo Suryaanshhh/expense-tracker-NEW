@@ -1,4 +1,12 @@
+
 const expenseTable=require('../models/expenses');
+
+exports.ShowExpense=(req,res,next)=>{
+    expenseTable.findAll().then(response=>{
+        console.log(response);
+        res.status(200).json({expense:response})
+    })
+}
 
 
 exports.AddExpense=async(req,res,next)=>{
@@ -12,3 +20,4 @@ exports.AddExpense=async(req,res,next)=>{
      })
      res.status(200).json({expense:data})
 }
+
