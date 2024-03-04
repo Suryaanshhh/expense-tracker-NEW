@@ -1,18 +1,18 @@
-const button=document.getElementById('submission');
+const button = document.getElementById('submission');
 
-button.addEventListener('click',function(){
-    const expense=document.getElementById('expense').value;
-    const description=document.getElementById('description').value;
-    const category=document.getElementById('category').value;
-    
-    const allExpense={
-        expense:expense,
-        description:description,
-        category:category
+button.addEventListener('click', function () {
+    const expense = document.getElementById('expense').value;
+    const description = document.getElementById('description').value;
+    const category = document.getElementById('category').value;
+
+    const allExpense = {
+        expense: expense,
+        description: description,
+        category: category
     }
-    axios.post('http://localhost:3000/add-expense',allExpense).then(result=>{
+    axios.post('http://localhost:3000/add-expense', allExpense).then(result => {
         console.log(result)
-    }).catch(err=>console.log(err))
+    }).catch(err => console.log(err))
 })
 
 
@@ -38,11 +38,12 @@ function showUser(user) {
     DelButton.textContent = 'Delete'
     DelButton.className = 'delete'
     const EditButton = document.createElement('button');
-    DelButton.textContent = 'Edit'
-    DelButton.className = 'edit'
+    EditButton.textContent = 'Edit'
+    EditButton.className = 'edit'
     //parent.innerHTML = parent.innerHTML + child;
     parent.appendChild(child);
-    //child.appendChild(EditButton);
+    child.appendChild(EditButton);
+
     child.appendChild(DelButton);
 
     DelButton.addEventListener('click', function Deleteuser() {
@@ -50,12 +51,30 @@ function showUser(user) {
         axios.delete(`http://localhost:3000/delete-expense/${child.id}`)
             .then((response) => {
                 // console.log(userId.config)
-                removeUSerFromScreen(child.id)
+                removeExpenseFromScreen(child.id)
             })
 
-           
+        EditButton.addEventListener('click', function EditExpense() {
+            const updatedExpense = {
+                expense: allExpense.expense,
+                description: allExpense.description,
+                category: allExpense.category
+            }
+
+            axios.put(`http://localhost:3000/edit-expense/${child.id}`, updatedExpense)
+                .then((response) => {
+                    console.log(response)
+                    document.getElementById('expense').value = allExpense.expense;
+                    document.getElementById('description').value = allExpense.description;
+                    document.getElementById('category').value = allExpense.category;
+                    removeExpenseFromScreen(child.id)
+                })
+
+        })
+
+
     })
-    function removeUSerFromScreen(userId) {
+    function removeExpenseFromScreen(userId) {
         const parentNode = document.getElementById('listofexpense');
         const childNodeTOBeDeleted = document.getElementById(userId);
         if (childNodeTOBeDeleted) {
