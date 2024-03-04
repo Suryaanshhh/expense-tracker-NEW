@@ -1,4 +1,5 @@
 
+const { where } = require('sequelize');
 const expenseTable=require('../models/expenses');
 
 exports.ShowExpense=(req,res,next)=>{
@@ -21,3 +22,11 @@ exports.AddExpense=async(req,res,next)=>{
      res.status(200).json({expense:data})
 }
 
+exports.DeleteExpense=(req, res, next) => {
+    const uId=req.params.id;
+    //console.log(uId);
+   expenseTable.destroy({where:{id:uId}}).then((result)=>{
+        console.log(result)
+        res.status(200).json({message:'Successfull'})
+    }).catch(err=>console.log(err))
+  }

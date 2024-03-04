@@ -37,9 +37,31 @@ function showUser(user) {
     const DelButton = document.createElement('button');
     DelButton.textContent = 'Delete'
     DelButton.className = 'delete'
+    const EditButton = document.createElement('button');
+    DelButton.textContent = 'Edit'
+    DelButton.className = 'edit'
     //parent.innerHTML = parent.innerHTML + child;
     parent.appendChild(child);
+    //child.appendChild(EditButton);
     child.appendChild(DelButton);
+
+    DelButton.addEventListener('click', function Deleteuser() {
+        console.log(child.id);
+        axios.delete(`http://localhost:3000/delete-expense/${child.id}`)
+            .then((response) => {
+                // console.log(userId.config)
+                removeUSerFromScreen(child.id)
+            })
+
+           
+    })
+    function removeUSerFromScreen(userId) {
+        const parentNode = document.getElementById('listofexpense');
+        const childNodeTOBeDeleted = document.getElementById(userId);
+        if (childNodeTOBeDeleted) {
+            parentNode.removeChild(childNodeTOBeDeleted);
+        }
+    }
 
 
 }
